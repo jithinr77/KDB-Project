@@ -1,0 +1,100 @@
+<html>
+	<body>
+	<title>websocket</title>
+	<form action="">
+		<input type="button"        value="connect"   onclick="connect()"    >
+		<input type="text"   		value="192.168.0.34"	  id="textBox" font-size:500pt;>
+		<!-- <input type="submit"        value="send"      onclick="return send()"> -->
+		<input type="button"        value="close"     onclick="ws.close()"   >
+	</form>
+	<textarea id="out" rows=5 cols=200 width:100%; max-width:90% ></textarea>
+	<!-- <div style="width: 1200px;"> -->
+		<canvas id="myChart" width="200" height="80" ></canvas>
+	<!-- </div> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script>
+<script>
+var date = new Date()
+var ctx = document.getElementById("myChart").getContext('2d');
+var dataSet= [];
+var labelSet= [];
+var myChart = new Chart(ctx, {
+
+    type: 'line',
+    data: {
+        labels: labelSet,
+        datasets: [{
+            label: 'Price Of ETH',
+            // data: [12, 19, 3, 5, 2, 3],
+            data:dataSet,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:false
+                }
+            }]
+        }
+    }
+});
+var ws,out=document.getElementById("out");
+var ipAddress=document.getElementById("textBox").value;
+console.log(ipAddress);
+function connect(){
+if ("WebSocket" in window){
+	var l = window.location;ws = new WebSocket("ws://" + (l.hostname ? l.hostname : ipAddress) + ":" + (l.port ? l.port : "5000") + "/"); 
+	out.value="connecting..." ;
+
+	ws.onopen=function(e){
+		out.value="connected";
+	}
+
+	ws.onclose=function(e){
+		out.value="disconnected";
+	}
+
+	ws.onmessage=function(e){
+		console.log(JSON.parse(e.data));
+		var obj=JSON.parse(e.data)
+		console.log("length: "+obj.tbl.length);
+		console.log("obj.tbl[0].data: "+obj.tbl[0].time);
+		console.log("obj.tbl[0].labels: "+obj.tbl[0].price);
+		out.value=e.data;
+		if(obj.tbl.length>1){
+			console.log("length is greater than 1");
+			for (var i = 0; i < obj.tbl.length; i++) {
+				dataSet.push(obj.tbl[i].price);
+				labelSet.push(obj.tbl[i].time);
+			}
+		}else{
+			dataSet.push(obj.tbl[0].price);
+			labelSet.push(obj.tbl[0].time);
+			dataSet.shift();
+			labelSet.shift();
+		}
+		myChart.update();
+
+	}
+	ws.onerror=function(e){out.value=e.data;}
+}else alert("WebSockets not supported on your browser.");
+}
+
+function send(){
+	x=document.getElementById("textBox");
+	v=x.value;
+	ws.send(v);
+	out.value="sent "+v;
+	return false;
+}
+</script>
+
+</body>
+</html>

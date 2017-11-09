@@ -1,7 +1,7 @@
 # KDB-Project
-These two projects were done to improve my KDB skills and demonstrate what I have learned. These were run on my raspberry pi for easy of use
+These two projects were done to improve my KDB skills and demonstrate what I have learned. These were run on my raspberry pi for easy of use 
 
-To use both these demos, you need to have KDB installed and set up on the machine you are using
+To use both these demos, you need to have KDB+ installed and set up on the machine you are using. Kdb+ is an in-memory column-oriented database based on the concept of ordered lists. In-memory means it primarily stores its data in RAM. This makes it extremely fast with a much simplified database engine but it requires a lot of RAM (Which no longer poses a problem as servers with massive amounts of RAM are now inexpensive). Column oriented database means that each column of data is stored sequentially in memory
 
 Demo 1: Use IPC with KDB and python to collect data from multiple cryptocurrency exchanges periodically and store in a KDB table and persist at the end of the day.
 

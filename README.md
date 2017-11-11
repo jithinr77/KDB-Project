@@ -9,7 +9,7 @@ Instructions to run Demo 1:
 1. Start server in the background by calling initServer.sh. This is usually called through crontab every time the pi restarts. 
 2. Then call setupServer.py to implement functions and logging in the server. Also done through crontab on reboot.
 3. Then call getPrices.py periodically to get prices from exchanges and pass it to server in the background. Called every minute via crontab.
-4. Then at the end of the day call saveAndResetKDBServer.py to save partitioned table to reset the q server for new day
+4. Then at the end of the day call saveAndResetKDBServer.py to save partitioned table and to reset the q server for new day
 
 Demo 2: Use data collected from demo 1 to demonstrate how websockets can be used to do live charting with the use of HTML, javascript and chartjs
 
